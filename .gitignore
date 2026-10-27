@@ -218,3 +218,30 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local secrets (allow explicitly safe templates)
+.env.*
+!.env.example
+!.env.*.example
+
+# Local corpora and downloaded data
+data/raw/
+/data/*.bin
+data/processed/
+data/downloads/
+data/external/
+data/cache/
+data/**/*.jsonl
+data/**/*.parquet
+data/**/*.arrow
+data/**/*.tar
+data/**/*.tar.gz
+data/**/*.zip
+
+# Trained models and generated experiment outputs
+artifacts/
+models/
+experiments/results/
+benchmarks/results/
+*.tiktoken
+*.tokenizer.json

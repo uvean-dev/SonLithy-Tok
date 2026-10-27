@@ -1,0 +1,37 @@
+status: draft
+
+decisions:
+  algorithm:
+    value: byte-level BPE
+    status: accepted
+  pipeline:
+    components:
+      - name: Split
+        status: proposed
+        grammar: TBD
+      - name: ByteLevel
+        use_regex: false
+        add_prefix_space: false
+        alphabet_source: ByteLevel.alphabet()
+        status: accepted
+      - name: BPE
+        status: accepted
+    status: proposed
+  unicode_normalization:
+    policy: conservative
+    additional_transformations: require experimental evidence
+    status: accepted
+  reserved_ids:
+    maximum: 128
+    included_in_vocabulary_size: true
+    status: constraint
+
+hypotheses:
+  vocabulary_size_candidates: [32768, 50048, 65536]
+  note: Candidates require comparative experiments; they are not measured results.
+
+open_questions:
+  min_frequency: TBD
+  alphabet_restrictions: TBD
+  training_stopping_criteria: TBD
+  split_grammar: TBD

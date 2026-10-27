@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sonlithy-tok-v1"
+dynamic = ["version"]
+description = "SonLithy 3.5 Tokenizer: a byte-level BPE tokenizer project"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit>=4",
+    "pytest>=8",
+    "ruff>=0.11",
+    "PyYAML>=6",
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "sonlithy_tok.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
