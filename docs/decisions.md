@@ -151,3 +151,74 @@ documentation as unverified targets, not as approved requirements. Current entri
 Origin: earlier project discussion, recorded in the handoff document. This is not
 independent technical evidence. Each entry needs a source and a status before it can
 become a requirement.
+
+## D-012. Vocabulary size for SonLithy-Base-v1 (SonLithy 3.5)
+
+**Status: Working target; final choice pending comparison (see D-015)**
+
+The current target configuration uses a total vocabulary of 65,536 tokens. This value
+includes the byte-level alphabet and the reserved special and service IDs.
+
+This is a working target, not a proven optimum. The candidates 32,768 and 50,048 remain
+experimental alternatives. The final choice will follow the comparison in D-015.
+
+**Verification:** Not tested. No tokenizer has been trained or evaluated.
+
+## D-013. SonLithy-Base-v1 model configuration
+
+**Status: Approved by developer (confirmed in chat); implementation not tested**
+
+- Architecture name: SonLithy-Base-v1 (model SonLithy 3.5).
+- 24 Transformer layers, d_model 768, 12 attention heads, head_dim 64, d_ff 3072.
+- Context length 2048 tokens.
+- Parameter count 220,442,112 for vocabulary 65,536, with weight tying and without a
+  learned positional-embedding table.
+
+Parameter arithmetic was checked by hand: embeddings 50,331,648 + 24 layers
+(7,087,872 each) + final LayerNorm 1,536.
+
+Developer confirmation was given in conversation. This is not evidence that the
+implementation matches the specification.
+
+**Verification:** Not tested. Model code does not yet exist.
+
+## D-014. Weight tying and positional encoding
+
+**Status: Approved by developer (confirmed in chat)**
+
+- Weight tying: enabled. The output projection shares weights with the input embedding.
+- Positional encoding: RoPE, with no learned positional-embedding table.
+
+These choices are the basis of the parameter count in D-013. Confirmation was given in
+conversation; no test result is implied.
+
+**Verification:** Not tested.
+
+## D-015. Vocabulary comparison design
+
+**Status: Chosen by developer, awaiting recording of open items**
+
+Main experiment:
+
+- One architecture (as in D-013) for all candidates.
+- Three vocabularies: 32,768, 50,048, 65,536.
+- Same fixed corpus and document order for all candidates.
+- Same budget of original UTF-8 bytes.
+- Tokens, FLOPs and quality are measured outcomes; the corpus is not rebuilt per candidate.
+- Total parameter counts differ by candidate because of the embedding matrix:
+  195,276,288 / 208,547,328 / 220,442,112.
+
+Control experiment: compare candidates at an equal FLOPs budget.
+
+Open items before running:
+
+- Tokenizer-training corpus size, sampling and seed (see D-009).
+- Training budget for the proxy experiments (the 6-billion-token figure is unverified;
+  see D-011).
+- Success criteria and statistical rules.
+- Metric definitions, including the status of the earlier tokens-per-word and P90 proposals.
+
+Interpretation note: differences between candidates combine tokenizer effects and the
+effect of embedding and output-layer size. The report must state this.
+
+**Verification:** Not tested. No experiment has been run.
