@@ -23,6 +23,39 @@ It converts text to token IDs and back. The design is built around four principl
 - **Reproducibility.** Corpus manifests, seeds, configurations, and decisions are
   recorded so that every result can be traced.
 
+## Pipeline (planned)
+
+The diagram shows the intended design. Stages are not implemented yet; the status of
+each stage is listed in [docs/decisions.md](docs/decisions.md).
+
+```mermaid
+flowchart LR
+    A["Input text (UTF-8)"] --> B["Split (regex candidate)<br/>Not tested"]
+    B --> C["ByteLevel<br/>use_regex=false, add_prefix_space=false"]
+    C --> D["BPE<br/>vocabulary target 65,536 (D-012)"]
+    D --> E["Token IDs"]
+    E -. "decode (exact round trip, to be tested)" .-> A
+    F["Special tokens<br/>trusted serializer only (D-005, Open)"] -.-> E
+```
+
+## Experiment plan (planned)
+
+The comparison of vocabulary sizes is designed, but no experiment has been run.
+
+```mermaid
+flowchart TD
+    C["Fixed corpus and document order<br/>(D-009, Open)"] --> T1["Tokenizer 32,768"]
+    C --> T2["Tokenizer 50,048"]
+    C --> T3["Tokenizer 65,536"]
+    T1 --> M["Same architecture SonLithy-Base-v1<br/>(D-013, D-014)"]
+    T2 --> M
+    T3 --> M
+    M --> R1["Main: equal UTF-8 byte budget<br/>measure BPB, tokens, FLOPs"]
+    M --> R2["Control: equal FLOPs budget"]
+    R1 --> D["Decision on vocabulary size<br/>(D-015, Open)"]
+    R2 --> D
+```
+
 ## Project status
 
 | Area | Status |
