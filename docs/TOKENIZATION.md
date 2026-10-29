@@ -27,3 +27,25 @@ implemented.
 
 All tokenization stages described here are design intent. No final split pattern,
 engine compatibility, or round-trip behavior has been verified.
+
+## Regex v7 candidate (D-001)
+
+This file is the working location for the regex v7 candidate, the expected split
+outputs, and the intended behavior. D-001 remains Open. This placement is not an
+approved normative decision.
+
+**Status: Not tested.** The full regex text is not yet recorded in this repository.
+Its source must be confirmed before it is added. Verification statuses use these
+labels:
+
+- Not tested: no run against the target engine.
+- Preflight passed: run in a different runtime; name the runtime and version.
+- Runtime tests passed: run against the pinned `tokenizers` version; record the
+  command and output.
+
+No compatibility with `tokenizers==0.23.3` is claimed.
+
+Expected split examples are not listed in this document yet. When added, each input
+must be written as an explicit Python literal in test code, with spaces escaped where
+the count matters (for example `"Hello\x20\x20world"` for two spaces), and checked with
+`repr`. Markdown tables are not used as the source of test inputs.

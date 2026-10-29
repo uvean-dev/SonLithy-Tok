@@ -25,6 +25,10 @@ test harness for it. No duplicate copies were found. There is therefore no basis
 choosing a canonical storage location or comparing versions. Do not reconstruct or
 edit the regex until the source and ownership are established.
 
+**Working note (not a decision):** `docs/TOKENIZATION.md` currently holds the
+description of the regex v7 candidate. This placement is not an approved normative
+decision. D-001 remains Open until the developer approves it.
+
 ## D-002. Specification synchronization
 
 **Status: Not recorded**
@@ -114,3 +118,36 @@ aggregated, and what constitutes one observation. No aggregation method is selec
 `git status --short` showed `?? 0000000` during this review. Its contents were not
 opened or inspected, and it is not treated as a project artifact. Do not modify,
 rename, delete, or further inspect it without the developer's permission.
+
+## D-009. Tokenizer corpus budget and sampling
+
+**Status: Open**
+
+Not yet decided:
+
+- Total corpus volume used for tokenizer training.
+- Sampling unit, sampling rules, and random seed.
+- Per-language and per-category minimums.
+- Deduplication and near-duplicate rules.
+- Exclusion rules for FLORES-200 `devtest` from tokenizer training.
+
+The 6-billion-token-position budget in the unverified-values list (D-011) belongs to
+main model training. It must not be used as the tokenizer corpus budget.
+
+## D-011. Unverified project values
+
+**Status: Open** (labelling rule proposed; not yet approved)
+
+Values not verified against the repository's canonical configuration are recorded in
+documentation as unverified targets, not as approved requirements. Current entries:
+
+- Corpus proportions 70% / 18% / 4.5% / 7.5%. Unit of measure (cleaned UTF-8 bytes
+  before tokenization) and source still need to be confirmed.
+- Per-language weights for the seven languages. Source and basis not confirmed.
+- 6-billion-token-position budget. Applies to main model training, not to the
+  tokenizer corpus (see D-009).
+- `tokenizers==0.23.3` as the target version. Not verified by a runtime run.
+
+Origin: earlier project discussion, recorded in the handoff document. This is not
+independent technical evidence. Each entry needs a source and a status before it can
+become a requirement.
