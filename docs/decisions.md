@@ -111,13 +111,14 @@ The checked-in documentation does not define a tokenization-parity metric or a
 whether P90 is calculated per language or over a pooled sample, how results are
 aggregated, and what constitutes one observation. No aggregation method is selected.
 
-## D-008. Unidentified file `0000000`
+## D-008. Unidentified local file `0000000`
 
-**Status: Open**
+**Status: Resolved**
 
-`git status --short` showed `?? 0000000` during this review. Its contents were not
-opened or inspected, and it is not treated as a project artifact. Do not modify,
-rename, delete, or further inspect it without the developer's permission.
+The file was a local, untracked saved output of `git log --stat` for commit
+3e99d58 (project skeleton). It contained no secrets or personal data, and its
+content is reproducible from Git history. The file was removed from the working
+copy. No tracked project file was affected.
 
 ## D-009. Tokenizer corpus budget and sampling
 
