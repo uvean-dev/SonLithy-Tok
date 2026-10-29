@@ -222,3 +222,13 @@ Interpretation note: differences between candidates combine tokenizer effects an
 effect of embedding and output-layer size. The report must state this.
 
 **Verification:** Not tested. No experiment has been run.
+
+## D-016. License
+
+**Status: Chosen by developer (confirmed in chat)**
+
+The project is licensed under the Apache License, Version 2.0, as stated in the
+LICENSE file. This is a project licence decision only. Licences of corpus data
+sources remain an open question (see D-009 and D-011).
+
+**Verification:** Not applicable (licence choice, not implementation).
