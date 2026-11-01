@@ -90,5 +90,8 @@ Verification is not a design approval; see docs/decisions.md for decisions.
 
 - Command: uv pip install --python /tmp/rt/bin/python . ; import sonlithy_tok.encoding
   Result: runtime import ok in a clean Python 3.11 environment without dev extras.
-- Command: pytest -q; ruff check .; ruff format --check .
-  Result: recorded in the terminal output of this step (fill in the numbers after running).
+- Command: pytest -q (after tokenizers moved to runtime dependencies)
+  Result: 64 passed (local, Python 3.11.18, tokenizers 0.23.3).
+- Command: ruff check .; ruff format --check .
+  Result: All checks passed!; 30 files already formatted.
+- Not observed: CI result for commit 3e45266.
