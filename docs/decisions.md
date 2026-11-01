@@ -132,18 +132,31 @@ copy. No tracked project file was affected.
 
 ## D-009. Tokenizer corpus budget and sampling
 
-**Status: Open**
+**Status: Approved (rules 1 to 9 below); source list, budget and FLORES n-gram check Open**
 
-Not yet decided:
+Approved rules:
+1. Only sources with an explicit open licence are used. The licence is recorded in the
+   manifest before any download. A source without a licence is not used. The developer
+   is responsible for the legal check of each licence.
+2. The sampling unit is a document, not a line.
+3. The budget is set only after measuring available unique UTF-8 bytes per language and
+   category.
+4. Minimum per language = min(target share x budget, 50% of available bytes). A shortfall
+   is recorded; it is not filled with duplicates.
+5. Exact deduplication by SHA-256 of the UTF-8 bytes. Near-duplicate detection (MinHash) is
+   a separate decision.
+6. Random seed 20261029, recorded in the manifest.
+7. FLORES-200 devtest: documents that match exactly are excluded from training. The 13-gram
+   overlap check is not implemented yet; it is an open implementation task.
+8. Language identification uses a confidence threshold. Documents below the threshold get
+   language "unknown" and split "excluded".
+9. Code and structured formats come only from repositories with a verified open licence.
 
-- Total corpus volume used for tokenizer training.
-- Sampling unit, sampling rules, and random seed.
-- Per-language and per-category minimums.
-- Deduplication and near-duplicate rules.
-- Exclusion rules for FLORES-200 `devtest` from tokenizer training.
+Open: the list of sources, the budget values, the target shares (they remain unverified
+under D-011, not laws), and the 13-gram check.
 
-The 6-billion-token-position budget in the unverified-values list (D-011) belongs to
-main model training. It must not be used as the tokenizer corpus budget.
+**Verification:** the manifest rules are tested on synthetic records only
+(tests/unit/test_corpus_manifest.py). No corpus has been measured.
 
 ## D-010. Unicode normalization and invalid input
 
@@ -272,3 +285,19 @@ it. It is no longer only a development extra. Verified: install without extras a
 of `sonlithy_tok.encoding` on Python 3.11 (see docs/VERIFICATION.md).
 
 **Verification:** installed and imported in a clean environment; CI result not yet observed.
+
+## D-018. Artifact format v1
+
+**Status: Approved (recommendation A)**
+
+An artifact is two files in one directory:
+- `tokenizer.json`: the file written by the tokenizers library, unchanged.
+- `meta.json`: schema_version (1), tokenizers_version, sha256 of tokenizer.json,
+  vocab_size, pipeline description. Extra keys may be added but cannot reuse these names.
+
+Loading checks the required fields, schema_version, SHA-256 of tokenizer.json, the
+tokenizers version, and the vocabulary size. Any mismatch is an explicit error. Upgrading
+tokenizers therefore requires re-verifying the artifact.
+
+**Verification:** tested on a synthetic pilot artifact, committed as tests/fixtures/pilot_v1.
+Compatibility with other runtimes (for example vLLM or llama.cpp) is Not tested.

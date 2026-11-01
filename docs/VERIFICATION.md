@@ -113,3 +113,7 @@ Verification is not a design approval; see docs/decisions.md for decisions.
   (PROBE_SPLIT, not the regex candidate).
   Not tested: real corpus (D-009), vocabulary comparison (D-015), artifact format
   as a contract, CI result for this commit (not yet observed).
+
+## 2026-10-29: CI for commit 194c04f
+
+- Result: green (reported by the developer). The job log was not reviewed in this record.
