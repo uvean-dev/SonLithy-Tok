@@ -65,3 +65,14 @@ Verification is not a design approval; see docs/decisions.md for decisions.
   vocabulary = 256 ByteLevel symbols, no merges.
   Not tested: BPE training, invalid input (D-010 option 1), the regex candidate
   (D-001), CI result for this commit (not yet observed).
+
+## 2026-10-29: lone-surrogate probe and input check
+
+- Command: Tokenizer(Split -> ByteLevel).encode("a\ud800b")
+  Result: TypeError "TextInputSequence must be str". Input is rejected, not replaced.
+  The message is misleading and version-dependent, so the project check_input raises
+  its own ValueError before the library is called.
+- Command: Tokenizer(Split -> ByteLevel).encode("a\u00e9b")
+  Result: 4 ids (one per UTF-8 byte); decode returns 'aéb'.
+- Command: pytest -v (local, after check_input was added)
+  Result: 42 passed (local). CI not observed for this commit.
