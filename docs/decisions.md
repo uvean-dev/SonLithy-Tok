@@ -69,13 +69,17 @@ those boundary rules.
 
 ## D-004. Split behavior on empty input
 
-**Status: Proposed (option A: empty list); awaiting developer confirmation**
+**Status: Approved (developer selected option A: empty list)**
 
-Probe on tokenizers 0.23.3: `Split(Regex(r'\s+|\S+'), behavior='isolated').pre_tokenize_str('') == []`.
-The test `test_split_empty_input_returns_empty_list` asserts this for the probe regex only.
+Contract: empty input produces an empty list of pieces. Offsets are only defined for
+non-empty pieces, so no piece is emitted for an empty string.
 
-**Verification:** tested once locally on the probe regex. Becomes Approved only after
-the developer confirms option A.
+Probe on tokenizers 0.23.3 (probe regex, not the candidate):
+`Split(Regex(r'\s+|\S+'), behavior='isolated').pre_tokenize_str('') == []`.
+Test: `test_split_empty_input_returns_empty_list`.
+
+**Verification:** tested once locally on the probe regex. The contract must be
+re-tested on the regex actually used by the pipeline once it is verified (see D-001).
 
 ## D-005. Special-token safety
 
