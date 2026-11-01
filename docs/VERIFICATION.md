@@ -76,3 +76,12 @@ Verification is not a design approval; see docs/decisions.md for decisions.
   Result: 4 ids (one per UTF-8 byte); decode returns 'aéb'.
 - Command: pytest -v (local, after check_input was added)
   Result: 42 passed (local). CI not observed for this commit.
+
+## 2026-10-29: encoding wrapper with D-010 check
+
+- Command: pytest -v (local, after encoding.py was added)
+  Result: all tests passed; includes round trip through the wrapper for 8 strings,
+  one id per UTF-8 byte, rejection of a lone surrogate before the library is called,
+  and the special-token spelling as ordinary text.
+  Not tested: BPE training, special-token contract (D-005), regex candidate (D-001),
+  CI result for this commit (not yet observed).
