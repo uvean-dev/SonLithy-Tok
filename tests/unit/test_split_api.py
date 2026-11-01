@@ -60,9 +60,9 @@ def test_split_two_spaces_form_one_piece():
     assert pieces == ["a", "\x20\x20", "b"]
 
 
-def test_split_empty_input_returns_list():
-    # D-004 is not decided: this only checks that the call returns a list.
-    assert isinstance(_split(""), list)
+def test_split_empty_input_returns_empty_list():
+    # D-004 (option A): empty input yields no pieces.
+    assert _split("") == []
 
 
 def test_split_matches_documented_example():
