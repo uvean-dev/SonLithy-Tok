@@ -43,3 +43,13 @@ Verification is not a design approval; see docs/decisions.md for decisions.
   Not covered: invert semantics, empty-input contract (D-004), regex candidate (D-001).
   CI note: tokenizers is not declared in dev dependencies, so these tests are
   skipped in GitHub Actions; this has not been run in CI.
+
+## 2026-10-29: regex candidate compile probe and local test run (Python 3.11.18, tokenizers 0.23.3)
+
+- Command: Split(Regex(SPLIT_REGEX_V7_CANDIDATE), behavior="isolated").pre_tokenize_str("Hello, world!")
+  Result: [('Hello', (0, 5)), (',', (5, 6)), (' world', (6, 12)), ('!', (12, 13))]
+  Scope: the candidate compiles and matches the handoff expectation for this one input.
+  This is not a verification of the regex. Other handoff examples are Not tested.
+- Command: pytest -v (local, after pyproject change)
+  Result: 10 passed (2 existing tests, 8 Split probe tests).
+  This is a local result. CI status is not recorded here until observed.

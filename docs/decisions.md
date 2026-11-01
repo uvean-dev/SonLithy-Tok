@@ -16,18 +16,19 @@ solely because they appear there. Repository findings below refer to files inspe
 for this register. Details explicitly attributed to the task context were not
 independently verified against source material when that material was not present.
 
-## D-001. Canonical regex v7
+## D-001. Canonical regex v7 storage location
 
-**Status: Open**
+**Status: Approved (developer selected option B)**
 
-The repository does not contain the full `SPLIT_REGEX_V7`, a regex v7 section, or a
-test harness for it. No duplicate copies were found. There is therefore no basis for
-choosing a canonical storage location or comparing versions. Do not reconstruct or
-edit the regex until the source and ownership are established.
+Approval covers only the storage location. `SPLIT_REGEX_V7_CANDIDATE` in
+`src/sonlithy_tok/pretokenizer.py` is copied without edits from the earlier project
+handoff. Its source document is not verified, and its correctness is not verified.
+Tests import the constant from the module; documentation links to it instead of
+keeping a second copy. The text changes only after a test shows a defect or the
+original source is found.
 
-**Working note (not a decision):** `docs/TOKENIZATION.md` currently holds the
-description of the regex v7 candidate. This placement is not an approved normative
-decision. D-001 remains Open until the developer approves it.
+**Verification:** compiles on tokenizers 0.23.3 and matches the expected split for one
+input ("Hello, world!"). Other expectations are Not tested.
 
 ## D-002. Specification synchronization
 
@@ -68,10 +69,13 @@ those boundary rules.
 
 ## D-004. Split behavior on empty input
 
-**Status: Not recorded**
+**Status: Proposed (option A: empty list); awaiting developer confirmation**
 
-No empty-input Split test was found. The documentation does not specify the expected
-result for an empty string. No contract is inferred.
+Probe on tokenizers 0.23.3: `Split(Regex(r'\s+|\S+'), behavior='isolated').pre_tokenize_str('') == []`.
+The test `test_split_empty_input_returns_empty_list` asserts this for the probe regex only.
+
+**Verification:** tested once locally on the probe regex. Becomes Approved only after
+the developer confirms option A.
 
 ## D-005. Special-token safety
 
