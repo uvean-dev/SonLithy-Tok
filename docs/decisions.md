@@ -83,21 +83,23 @@ re-tested on the regex actually used by the pipeline once it is verified (see D-
 
 ## D-005. Special-token safety
 
-**Status: Open**
+**Status: Approved (principle); reserved-ID allocation Open**
 
-`docs/TOKENIZATION.md` states the design requirement that literal user text matching
-a special-token spelling must not silently become a control token, and that an API
-should distinguish ordinary text from explicitly authorized special-token input.
-The distinction and mechanics are not implemented or specified sufficiently to be a
-contract. Decide and verify separately:
+Approved:
+- Ordinary text that contains a special-token spelling (for example `<|im_start|>`) is
+  encoded as ordinary bytes. It never becomes a control token.
+- The encoding wrapper (`src/sonlithy_tok/encoding.py`) calls the library with
+  `add_special_tokens=False` and registers no special tokens.
+- Control IDs are inserted only by trusted code (a future serializer), never from
+  user text.
 
-- Literal text whose characters match a special-token spelling.
-- A genuine reserved control ID.
-- Explicit insertion of a control token by a trusted serializer.
+Open:
+- The list of reserved special and service IDs (at most 128, inside the 65,536
+  vocabulary; D-012).
+- The API of the trusted serializer.
 
-Required future tests should cover alternative spellings, adjacent characters,
-repetitions, and occurrences inside ordinary text. No mechanism is implemented by
-this register.
+**Verification:** tested on the byte-level pipeline only. `test_special_token_spelling_is_ordinary_text`
+checks that the spelling round-trips as ordinary bytes. Trusted insertion is Not tested.
 
 ## D-006. TPW terminology
 
@@ -260,3 +262,13 @@ LICENSE file. This is a project licence decision only. Licences of corpus data
 sources remain an open question (see D-009 and D-011).
 
 **Verification:** Not applicable (licence choice, not implementation).
+
+## D-017. tokenizers as a runtime dependency
+
+**Status: Approved (developer confirmed in chat)**
+
+`tokenizers==0.23.3` is a runtime dependency of the package, because `encoding.py` imports
+it. It is no longer only a development extra. Verified: install without extras and import
+of `sonlithy_tok.encoding` on Python 3.11 (see docs/VERIFICATION.md).
+
+**Verification:** installed and imported in a clean environment; CI result not yet observed.

@@ -85,3 +85,10 @@ Verification is not a design approval; see docs/decisions.md for decisions.
   and the special-token spelling as ordinary text.
   Not tested: BPE training, special-token contract (D-005), regex candidate (D-001),
   CI result for this commit (not yet observed).
+
+## 2026-10-29: tokenizers as runtime dependency; D-005 approved
+
+- Command: uv pip install --python /tmp/rt/bin/python . ; import sonlithy_tok.encoding
+  Result: runtime import ok in a clean Python 3.11 environment without dev extras.
+- Command: pytest -q; ruff check .; ruff format --check .
+  Result: recorded in the terminal output of this step (fill in the numbers after running).
