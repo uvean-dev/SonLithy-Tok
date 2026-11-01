@@ -143,6 +143,27 @@ Not yet decided:
 The 6-billion-token-position budget in the unverified-values list (D-011) belongs to
 main model training. It must not be used as the tokenizer corpus budget.
 
+## D-010. Unicode normalization policy
+
+**Status: Approved for normalization (option A: no normalization); invalid-input behaviour Open**
+
+Approved contract: `decode(encode(s)) == s` for every Python `str` that can be encoded as
+UTF-8. The tokenizer applies no Unicode normalization (NFC, NFKC, NFD, NFKD), no whitespace
+trimming, no line-ending conversion, and no space collapsing.
+
+Open: the behaviour for strings that cannot be encoded as UTF-8, for example unpaired
+surrogates such as `"\ud800"`. Options: (1) raise an explicit error (recommended), or
+(2) replace the character with U+FFFD. Not decided. Option 2 breaks the round-trip
+contract for such inputs.
+
+Normalization, if it is ever needed, belongs to corpus preparation (D-009) and must be
+recorded in the corpus manifest.
+
+The YAML field `unicode_normalization: conservative` is not changed by this record. Its
+rewording is a separate change.
+
+**Verification:** Not tested. Round-trip tests are not yet written.
+
 ## D-011. Unverified project values
 
 **Status: Open** (labelling rule proposed; not yet approved)
