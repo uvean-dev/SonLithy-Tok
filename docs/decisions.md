@@ -143,26 +143,24 @@ Not yet decided:
 The 6-billion-token-position budget in the unverified-values list (D-011) belongs to
 main model training. It must not be used as the tokenizer corpus budget.
 
-## D-010. Unicode normalization policy
+## D-010. Unicode normalization and invalid input
 
-**Status: Approved for normalization (option A: no normalization); invalid-input behaviour Open**
+**Status: Approved (option A: no normalization; option 1: explicit error for invalid input)**
 
-Approved contract: `decode(encode(s)) == s` for every Python `str` that can be encoded as
-UTF-8. The tokenizer applies no Unicode normalization (NFC, NFKC, NFD, NFKD), no whitespace
+Contract: `decode(encode(s)) == s` for every Python `str` that can be encoded as UTF-8.
+The tokenizer applies no Unicode normalization (NFC, NFKC, NFD, NFKD), no whitespace
 trimming, no line-ending conversion, and no space collapsing.
 
-Open: the behaviour for strings that cannot be encoded as UTF-8, for example unpaired
-surrogates such as `"\ud800"`. Options: (1) raise an explicit error (recommended), or
-(2) replace the character with U+FFFD. Not decided. Option 2 breaks the round-trip
-contract for such inputs.
+Inputs that cannot be encoded as UTF-8, such as strings containing unpaired surrogates
+(for example "\ud800"), are rejected with an explicit error. They are never replaced
+with U+FFFD or any other character.
 
 Normalization, if it is ever needed, belongs to corpus preparation (D-009) and must be
 recorded in the corpus manifest.
 
-The YAML field `unicode_normalization: conservative` is not changed by this record. Its
-rewording is a separate change.
+The YAML field `unicode_normalization: conservative` is not changed by this record.
 
-**Verification:** Not tested. Round-trip tests are not yet written.
+**Verification:** Not tested. Round-trip and invalid-input tests are not yet written.
 
 ## D-011. Unverified project values
 
