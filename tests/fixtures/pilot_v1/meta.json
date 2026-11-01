@@ -1,0 +1,10 @@
+{
+  "corpus": "synthetic_corpus(repetitions=40), deterministic, not real data",
+  "min_frequency": 2,
+  "pipeline": "Split(\\s+|\\S+) -> ByteLevel(add_prefix_space=False, use_regex=False); BPE trained",
+  "schema_version": 1,
+  "sha256": "b8dc4fe660515990151b7114f879fc77a613e143217dd8e8d5aced17be883780",
+  "target_vocab_size": 512,
+  "tokenizers_version": "0.23.3",
+  "vocab_size": 486
+}
