@@ -19,3 +19,27 @@ Verification is not a design approval; see docs/decisions.md for decisions.
   Result: 2 passed (tests/unit/test_config.py, tests/unit/test_package.py)
 - Not run: any test of Split, ByteLevel, BPE training, encoding or decoding.
   Status: Split behaviour on tokenizers==0.23.3 is Not tested.
+
+## 2026-10-29: Split API probe (Codespaces, Python 3.11.18, tokenizers 0.23.3)
+
+- Command: pre_tokenize_str on "Hello, world!" with patterns \s+ and \s+|\S+,
+  invert=False and invert=True.
+  Result: identical output in all four cases:
+  [('Hello,', (0, 6)), (' ', (6, 7)), ('world!', (7, 13))].
+- Command: pre_tokenize_str on "a😀 b" with \s+|\S+, invert=False.
+  Result: [('a😀', (0, 2)), (' ', (2, 3)), ('b', (3, 4))]; slices text[start:end]
+  equal the pieces. For this input, offsets are Python code-point indices.
+- Documentation: Split.__doc__ says invert means "Whether to invert the pattern".
+  It does not define the effect with behavior="isolated".
+  Status: invert semantics Not tested. No test asserts them.
+- Scope: not tested are combining marks, ZWJ/ZWNJ, multi-code-point emoji,
+  and the SonLithy-Tok regex candidate (D-001, Open).
+
+- Command: ruff format tests/unit/test_split_api.py; ruff format --check; ruff check
+  Result: ruff format reported "1 file left unchanged" (no edit in this run); ruff format --check: 1 file already formatted; ruff check: All checks passed!
+- Command: pytest tests/unit/test_split_api.py -v (after ruff format)
+  Result: 8 passed (tokenizers 0.23.3, Python 3.11.18). Covers version pin, offsets,
+  code points for BMP and one non-BMP emoji, two-space piece, documented example.
+  Not covered: invert semantics, empty-input contract (D-004), regex candidate (D-001).
+  CI note: tokenizers is not declared in dev dependencies, so these tests are
+  skipped in GitHub Actions; this has not been run in CI.
