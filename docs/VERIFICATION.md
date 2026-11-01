@@ -95,3 +95,21 @@ Verification is not a design approval; see docs/decisions.md for decisions.
 - Command: ruff check .; ruff format --check .
   Result: All checks passed!; 30 files already formatted.
 - Not observed: CI result for commit 3e45266.
+
+## 2026-10-29: pilot BPE training on a synthetic corpus
+
+- Commit: 194c04f (code was pushed before this test run; the run below is the
+  first verification of that code).
+- Command: ruff check .; ruff format --check .
+  Result: All checks passed!; 32 files already formatted.
+- Command: pytest -v tests/unit/test_bpe_pilot.py
+  Result: 20 passed (Python 3.11.18, tokenizers 0.23.3). Covers determinism of
+  to_str(), vocabulary size between 256 and 512 with multi-byte tokens, round trip
+  for 15 strings, merge compression on repeated English, save/load equivalence,
+  and rejection of a lone surrogate after training.
+- Command: pytest -q
+  Result: 84 passed (64 earlier tests and 20 pilot tests).
+- Scope: synthetic corpus, vocabulary 512, min_frequency 2, probe split pattern
+  (PROBE_SPLIT, not the regex candidate).
+  Not tested: real corpus (D-009), vocabulary comparison (D-015), artifact format
+  as a contract, CI result for this commit (not yet observed).
