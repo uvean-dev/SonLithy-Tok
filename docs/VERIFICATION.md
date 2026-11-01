@@ -53,3 +53,15 @@ Verification is not a design approval; see docs/decisions.md for decisions.
 - Command: pytest -v (local, after pyproject change)
   Result: 10 passed (2 existing tests, 8 Split probe tests).
   This is a local result. CI status is not recorded here until observed.
+
+## 2026-10-29: byte-level round-trip tests (Python 3.11.18, tokenizers 0.23.3)
+
+- Command: ruff check tests/unit/test_roundtrip_bytelevel.py; ruff format (1 file reformatted)
+  Result: All checks passed!; 1 file already formatted.
+- Command: pytest tests/unit/test_roundtrip_bytelevel.py -v (local)
+  Result: 32 passed. Covers exact round trip and one token per UTF-8 byte for 16 strings,
+  empty input, and distinct composed and decomposed forms of U+00E9.
+  Pipeline: Split(\s+|\S+) -> ByteLevel(add_prefix_space=False, use_regex=False),
+  vocabulary = 256 ByteLevel symbols, no merges.
+  Not tested: BPE training, invalid input (D-010 option 1), the regex candidate
+  (D-001), CI result for this commit (not yet observed).
